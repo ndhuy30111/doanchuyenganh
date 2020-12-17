@@ -176,7 +176,7 @@
 </div>
 @endsection
 @section('editor')
-@include('Admin.PluginJs.Editor')
+@include('admin.pluginjs.editor')
 <script>
     (function() {
       'use strict';

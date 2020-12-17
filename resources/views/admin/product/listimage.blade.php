@@ -88,5 +88,5 @@
 </div>
 @endsection
 @section('editor')
-@include('Admin.PluginJs.dataTable')
+@include('admin.pluginjs.datatable')
 @endsection
