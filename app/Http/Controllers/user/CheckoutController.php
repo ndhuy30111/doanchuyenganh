@@ -12,7 +12,12 @@ class CheckoutController extends Controller
     //
     public function index()
     {
-        return view('page.checkout');
+        if(Session('Cart')){
+
+            return view('page.checkout');
+        }else{
+            return redirect('/');
+        }
     }
     public function checkout(Request $request)
     {
@@ -25,7 +30,7 @@ class CheckoutController extends Controller
                 'phonenumber' => $request->sodienthoai,
             ]);
             foreach ($Cart as $key => $value) {
-                $sum += $value['price'];
+                $sum += $value['price']*$value['Amount'];
                 DB::table('invoicedetails')
                     ->insert([
                         'amount' => $value['Amount'],

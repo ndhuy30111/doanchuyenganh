@@ -1,6 +1,5 @@
 @extends('index')
 @section('page')
-<!-- Breadcrumb Begin -->
 <div class="breadcrumb-option">
     <div class="container">
         <div class="row">
@@ -14,9 +13,6 @@
         </div>
     </div>
 </div>
-<!-- Breadcrumb End -->
-
-<!-- Product Details Section Begin -->
 <section class="product-details spad">
     <div class="container">
         <div class="row">
@@ -82,18 +78,13 @@
                             <li>
                                 <span>Kích thước:</span>
                                 <div class="size__btn">
-                                    <label for="s-btn" class="active">
-                                        <input type="radio" id="s-btn" name="size" value="S" checked>
-                                        s
+                                    @foreach ($size as $item)
+                                    <label for="{{$item->title}}-btn" class="{{$item->amount==0?'disabled':''}}">
+                                        <input type="radio" id="{{$item->title}}-btn" name="size"
+                                            value="{{$item->title}}">
+                                        {{$item->title}}
                                     </label>
-                                    <label for="m-btn">
-                                        <input type="radio" id="m-btn" name="size" value="M">
-                                        m
-                                    </label>
-                                    <label for="l-btn">
-                                        <input type="radio" id="l-btn" name="size" value="L">
-                                        l
-                                    </label>
+                                    @endforeach
                                 </div>
                             </li>
                             <li>
@@ -121,20 +112,7 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabs-1" role="tabpanel">
                             <h6>Description</h6>
-                            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut loret fugit,
-                                sed
-                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt loret.
-                                Neque porro lorem quisquam est, qui dolorem ipsum quia dolor si. Nemo enim ipsam
-                                voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed quia ipsu
-                                consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nulla
-                                consequat massa quis enim.</p>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula
-                                eget
-                                dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient
-                                montes,
-                                nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
-                                pretium
-                                quis, sem.</p>
+                            {!!$product->introduce!!}
                         </div>
                         <div class="tab-pane" id="tabs-2" role="tabpanel">
                             <h6>Specification</h6>
@@ -277,7 +255,6 @@
         </div>
     </div>
 </section>
-<!-- Product Details Section End -->
 @endsection
 @section('js')
 <script type="text/javascript">
@@ -300,8 +277,11 @@
             $("#change-item-cart").html(data);
         },
         error: function(data){
-            alertify.set('notifier','position', 'top-center');
-            alertify.error(data);
+            var errors = data.responseJSON;
+            $.each( errors.errors, function( key, value ) {
+                alertify.set('notifier','position', 'top-center');
+                alertify.error(value);
+            });
         }
         });
     }
@@ -311,12 +291,14 @@
             processData:false,
             contentType:false,
             method:'GET',
-            success: function(data){
-                $('#image_colors').empty();
+           
+        }).done(function(data){
+            $('#image_colors').empty();
                 $('#image_colors').html(data);
+                $('#image_colors').children('meta,link,title,style,script').remove();
                 $('#js').empty();
-            },
-        })
+        });
     }
+ 
 </script>
 @endsection

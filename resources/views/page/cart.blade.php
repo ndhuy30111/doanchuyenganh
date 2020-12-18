@@ -76,6 +76,7 @@ $sum=0;
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="cart__btn">
@@ -105,7 +106,10 @@ $sum=0;
                         <li>Subtotal <span>{{number_format($sum,0,'','.')}}</span></li>
                         <li>Total <span>{{number_format($sum,0,'','.')}}</span></li>
                     </ul>
+
+                    @if ($sum>0)
                     <a href="{{url('checkout')}}" class="primary-btn">Proceed to checkout</a>
+                    @endif
                 </div>
             </div>
         </div>

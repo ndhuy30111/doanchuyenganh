@@ -1,28 +1,28 @@
-   <!-- Page Preloder -->
-   <div id="preloder">
+<div id="preloder">
     <div class="loader"></div>
 </div>
-
-<!-- Offcanvas Menu Begin -->
 <div class="offcanvas-menu-overlay"></div>
 <div class="offcanvas-menu-wrapper ">
     <div class="offcanvas__close">+</div>
     <ul class="offcanvas__widget">
         <li><span class="icon_search search-switch"></span></li>
-        <li><a href="#"><span class="icon_heart_alt"></span>
-            <div class="tip">2</div>
-        </a></li>
-        <li><a href="#"><span class="icon_bag_alt"></span>
-            <div class="tip">2</div>
-        </a></li>
+        <li><a href="{{url("cart")}}"><span class="icon_bag_alt"></span>
+            <div class="tip">{{Session("Cart")?count(Session("Cart")):0}}</div>
+            </a></li>
     </ul>
     <div class="offcanvas__logo">
         <a href="{{asset("/")}}"><img src="img/logo7760.png" alt=""></a>
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="offcanvas__auth">
-        <a href="#">Login</a>
-        <a href="#">Register</a>
+        @auth
+        <a href="">{{Auth::user()->name}}</a>
+        <a href={{asset('./logout')}}>Logout</a>
+        @endauth
+        @guest
+        <a href={{asset('./login')}}>Login</a>
+        <a href={{asset('./login')}}>Register</a>
+        @endguest
     </div>
 </div>
 <!-- Offcanvas Menu End -->
@@ -40,19 +40,11 @@
                 <nav class="header__menu">
                     <ul>
                         <li class="active"><a href="{{asset("/")}}">Home</a></li>
-                        <li><a href="#">Women’s</a></li>
-                        <li><a href="#">Men’s</a></li>
+                        @foreach ($dataheader as $item)
+                        <li><a href="{{url('product',$item->url)}}">{{$item->title}}</a></li>
+                        @endforeach
                         <li><a href="{{route("product")}}">Shop</a></li>
-                        <li><a href="#">Pages</a>
-                            <ul class="dropdown">
-                                <li><a href="./product-details">Product Details</a></li>
-                                <li><a href="./shop-cart">Shop Cart</a></li>
-                                <li><a href="./checkout">Checkout</a></li>
-                                <li><a href="./blog-details">Blog Details</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="./blog">Blog</a></li>
-                    <li><a href="./{{route("contact")}}">Contact</a></li>
+                        <li><a href="{{url("contact")}}">Contact</a></li>
                     </ul>
                 </nav>
             </div>
@@ -60,25 +52,20 @@
                 <div class="header__right">
                     <div class="header__right__auth">
                         @auth
-                         <a href="">{{Auth::user()->name}}</a>
-                         <a href={{asset('./logout')}}>Logout</a>
-
+                        <a href="">{{Auth::user()->name}}</a>
+                        <a href={{asset('./logout')}}>Logout</a>
                         @endauth
                         @guest
                         <a href={{asset('./login')}}>Login</a>
                         <a href={{asset('./login')}}>Register</a>
-
                         @endguest
                     </div>
                     <ul class="header__right__widget">
                         <li><span class="icon_search search-switch"></span></li>
-                        <li><a href="#"><span class="icon_heart_alt"></span>
-                            <div class="tip">2</div>
-                        </a></li>
-                    <li><a href="{{url("cart")}}" id="change-item-cart">
-                            <span class="icon_bag_alt"></span>
-                            <div class="tip" >{{Session("Cart")?count(Session("Cart")):0}}</div>
-                        </a></li>
+                        <li><a href="{{url("cart")}}" id="change-item-cart">
+                                <span class="icon_bag_alt"></span>
+                                <div class="tip">{{Session("Cart")?count(Session("Cart")):0}}</div>
+                            </a></li>
                     </ul>
                 </div>
             </div>

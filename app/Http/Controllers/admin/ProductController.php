@@ -33,7 +33,8 @@ class ProductController extends Controller
                 'product.price',
                 'product.status',
                 'product.discount',
-                'colorproduct.idcolorproduct'
+                'colorproduct.idcolorproduct',
+                'product.url'
             )
             ->groupBy('product.idproduct')
             ->orderByRaw('product.status')
@@ -42,6 +43,7 @@ class ProductController extends Controller
             ->groupBy('colorproductid')
             ->select()
             ->get();
+
         return  view(views . 'list', [
             'Sanpham' => $sanpham,
             'Image' => $image
@@ -172,7 +174,7 @@ class ProductController extends Controller
             'color' => $color,
             'size' => $listsize,
             'Category' => $Category,
-            'Category_Product'=>$Category_Product
+            'Category_Product' => $Category_Product
         ]);
     }
     public function updateProduct(UpdateProductRequest $request, $id)
@@ -191,13 +193,13 @@ class ProductController extends Controller
                     'status' => $request->trangthai
                 ]);
 
-            $insertCategory =DB::table('category_products')->where('productsid', '=', $id)->update([
+            $insertCategory = DB::table('category_products')->where('productsid', '=', $id)->update([
                 'categoryid' => $request->danhmuc,
             ]);
-            if($insertCategory==0){
+            if ($insertCategory == 0) {
                 DB::table('category_products')->insert([
-                    'productsid'=>$id,
-                    'categoryid'=> $request->danhmuc
+                    'productsid' => $id,
+                    'categoryid' => $request->danhmuc
                 ]);
             }
             DB::commit();
@@ -245,7 +247,20 @@ class ProductController extends Controller
         }
         return redirect()->back();
     }
-
+    public function updateStatus(Request $request,$id){
+        DB::beginTransaction();
+        try{
+            DB::table('product')->where(
+                'idproduct','=',$id,
+            )->update([
+                'status'=>$request->status==1?2:1,
+            ]);
+            DB::commit();
+        }catch(Exception $e){
+            DB::rollback();
+        }
+        return redirect()->back();
+    }
     /*
         Xoá sản phẩm
     */
@@ -256,7 +271,7 @@ class ProductController extends Controller
         try {
             $color = DB::table('colorproduct')->select('idcolorproduct')->where('productid', '=', $id)->first();
             $image = DB::table('image')->select('url')->where('colorproductid', '=', $color->idcolorproduct)->get();
-            DB::table('product')->where('idproduct','=',$id)->delete();
+            DB::table('product')->where('idproduct', '=', $id)->delete();
             DB::commit();
             foreach ($image as $value) {
                 Storage::delete("images/product/$value->url");
