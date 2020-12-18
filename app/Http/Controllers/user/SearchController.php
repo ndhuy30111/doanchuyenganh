@@ -10,8 +10,6 @@ class SearchController extends Controller
 {
     public function Search(Request $req){
         $category = DB::table('category')->get();
-        $category_products = DB::table('category_products')->get();
-        $colorproduct = DB::table('colorproduct')->get();
         $image = DB::table('image')->get();
         $product = DB::table('product')
             ->join('colorproduct', 'colorproduct.productid', '=', 'product.idproduct')

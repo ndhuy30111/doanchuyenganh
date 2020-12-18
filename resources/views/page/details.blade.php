@@ -291,7 +291,6 @@
             processData:false,
             contentType:false,
             method:'GET',
-           
         }).done(function(data){
             $('#image_colors').empty();
                 $('#image_colors').html(data);
@@ -299,6 +298,6 @@
                 $('#js').empty();
         });
     }
- 
+
 </script>
 @endsection

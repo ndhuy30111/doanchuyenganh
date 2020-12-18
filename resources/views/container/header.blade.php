@@ -6,14 +6,24 @@
     <div class="offcanvas__close">+</div>
     <ul class="offcanvas__widget">
         <li><span class="icon_search search-switch"></span></li>
-        <li><a href="{{url("cart")}}"><span class="icon_bag_alt"></span>
-            <div class="tip">{{Session("Cart")?count(Session("Cart")):0}}</div>
+        <li><a href="{{url("cart")}}" id="change-item-cart">
+                <span class="icon_bag_alt"></span>
+                <div class="tip">{{Session("Cart")?count(Session("Cart")):0}}</div>
             </a></li>
     </ul>
     <div class="offcanvas__logo">
         <a href="{{asset("/")}}"><img src="img/logo7760.png" alt=""></a>
     </div>
-    <div id="mobile-menu-wrap"></div>
+    <div id="mobile-menu-wrap">
+        <ul>
+            <li class="active"><a href="{{asset("/")}}">Home</a></li>
+            @foreach ($dataheader as $item)
+            <li><a href="{{url('product',$item->url)}}">{{$item->title}}</a></li>
+            @endforeach
+            <li><a href="{{route("product")}}">Shop</a></li>
+            <li><a href="{{url("contact")}}">Contact</a></li>
+        </ul>
+    </div>
     <div class="offcanvas__auth">
         @auth
         <a href="">{{Auth::user()->name}}</a>

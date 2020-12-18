@@ -23,7 +23,6 @@ class ProductController extends Controller
             ->groupBy('product.idproduct')
             ->select('product.title', 'product.price', 'image.url as urlimage', 'product.idproduct', 'product.url')
             ->get();
-       
         return view('page.shop', [
             'image' => $image,
             'product' => $product,
@@ -46,7 +45,7 @@ class ProductController extends Controller
                     'image' => $image
                 ]
             );
-        
+
     }
     public function Category($url)
     {
@@ -58,10 +57,11 @@ class ProductController extends Controller
             ->join('colorproduct', 'colorproduct.productid', '=', 'product.idproduct')
             ->join('image', 'image.colorproductid', '=', 'colorproduct.idcolorproduct')
             ->groupBy('product.idproduct')
-            ->select('product.title', 'product.price', 'image.url as urlimage', 'category.url')
+            ->select('product.title', 'product.price', 'image.url as urlimage', 'product.url','product.idproduct')
             ->where('category.url', '=', $url)
             ->get();
-        return view('page.category', [
+          
+        return view('page.shop', [
             'image' => $image,
             'product' => $product,
             'category' => $category
