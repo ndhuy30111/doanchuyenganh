@@ -12,15 +12,16 @@ class CheckoutController extends Controller
     //
     public function index()
     {
-        if(Session('Cart')){
+        if (Session('Cart')) {
 
             return view('page.checkout');
-        }else{
+        } else {
             return redirect('/');
         }
     }
     public function checkout(Request $request)
     {
+
         $sum = 0;
         $Cart = Session('Cart') ?? NULL;
         if ($Cart != NULL) {
@@ -29,8 +30,9 @@ class CheckoutController extends Controller
                 'address' => $request->diachi,
                 'phonenumber' => $request->sodienthoai,
             ]);
-            foreach ($Cart as $key => $value) {
-                $sum += $value['price']*$value['Amount'];
+            DB::beginTransaction();
+            foreach ($Cart as $value) {
+                $sum += $value['price'] * $value['Amount'];
                 DB::table('invoicedetails')
                     ->insert([
                         'amount' => $value['Amount'],
@@ -38,11 +40,17 @@ class CheckoutController extends Controller
                         'productinfoId' => $value['Titleproduct'],
                         'productIdproduct' => $value['idproduct']
                     ]);
+                $size = DB::table("sizeproduct")->where('idcolorproduct', '=', $value['idsize'])->first();
+                if ($size->amount - $value['Amount'] < 0) {
+                    DB::rollback();
+                }
+                DB::table('sizeproduct')->update(['amount' => $size->amount - $value['Amount']]);
             }
             DB::table('invoice')->update(['totalmoney' => $sum]);
+            DB::commit();
             $request->session()->forget('Cart');
             return redirect('/');
-        }else{
+        } else {
             return redirect()->back();
         }
     }

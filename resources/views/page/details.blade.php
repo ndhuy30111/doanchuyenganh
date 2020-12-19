@@ -77,11 +77,11 @@
                             </li>
                             <li>
                                 <span>Kích thước:</span>
-                                <div class="size__btn">
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons" id="sizeAmount">
                                     @foreach ($size as $item)
-                                    <label for="{{$item->title}}-btn" class="{{$item->amount==0?'disabled':''}}">
+                                    <label for="{{$item->title}}-btn" class=" btn btn-light {{$item->amount==0?'disabled':''}}">
                                         <input type="radio" id="{{$item->title}}-btn" name="size"
-                                            value="{{$item->title}}">
+                                            value="{{$item->title}}" {{$item->amount==0?'disabled':''}}>
                                         {{$item->title}}
                                     </label>
                                     @endforeach
@@ -293,10 +293,20 @@
             method:'GET',
         }).done(function(data){
             $('#image_colors').empty();
-                $('#image_colors').html(data);
-                $('#image_colors').children('meta,link,title,style,script').remove();
-                $('#js').empty();
+            $('#image_colors').html(data);
+            $('#image_colors').children('meta,link,title,style,script').remove();
         });
+        $.ajax({
+            url:'{{url("size?id=")}}'+ id,
+            processData:false,
+            contentType:false,
+            method:'GET',
+        }).done(function(data){
+            $('#sizeAmount').empty();
+            $('#sizeAmount').empty();
+            $('#sizeAmount').html(data);
+            $('#sizeAmount').children('meta,link,title,style,script').remove();
+        })
     }
 
 </script>

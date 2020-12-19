@@ -1,9 +1,7 @@
 
 <html lang="vi">
 <head >
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="{{asset("css/bootstrap.min.css")}}" type="text/css">
-    <link rel="stylesheet" href="{{asset("css/elegant-icons.css")}}" type="text/css">
     <link rel="stylesheet" href="{{asset("css/owl.carousel.min.css")}}" type="text/css">
     <link rel="stylesheet" href="{{asset("css/style.css")}}" type="text/css">
     <script type="text/javascript" src="{{asset("js/jquery-3.3.1.min.js")}}"></script>

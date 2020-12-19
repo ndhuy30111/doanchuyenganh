@@ -36,6 +36,12 @@ class CartController extends Controller
                 'errors'  => $validator->errors()->all(),
             ], 400);
         } else {
+            if ($request->size=="undefined") {
+                return response()->json([
+                    'success' => 'false',
+                    'errors'  => ["Vui lòng bạn chọn kích thước"],
+                ], 400);
+            }
             $product = DB::table('product')
                 ->where('idproduct', '=', $request->id)->first();
             $color = DB::table('colorproduct')
@@ -48,16 +54,17 @@ class CartController extends Controller
                 ->where('colorproductid', '=', $color->idcolorproduct)
                 ->where('title', '=', $request->size)
                 ->first();
-            if (!isset($product->title) || !isset($color->title) || !isset($size->title)) {
+            if ($size->amount - $request->soluong < 0) {
                 return response()->json([
                     'success' => 'false',
-                    'errors'  => ["Vui lòng bạn chọn kích thước"],
+                    'errors'  => ["Số lượng không đủ cửa hàng hiện tại còn $size->amount"],
                 ], 400);
             }
             $name = $product->title . ' / ' . $color->title . ' / ' . $size->title;
             $key =  Str::slug($name);
             $cart = [
                 "idproduct" => $product->idproduct,
+                "idsize" => $size->idcolorproduct,
                 'url' => $product->url,
                 "Titleproduct" => $name,
                 "Amount" => $request->soluong,
@@ -72,14 +79,26 @@ class CartController extends Controller
     public function update(Request $request)
     {
         $request->validate(
-            ['soluong.*' => 'numeric|min:1']
+            [
+                'soluong.*' => 'numeric|min:1'
+            ]
         );
         $data = $request->except("_token");
         $cart = Session("Cart");
         $i = 0;
         foreach ($cart as $key => $value) {
+            $size = DB::table('sizeproduct')
+                ->where('idcolorproduct', '=', $value['idsize'])
+                ->first();
+            if ($size->amount - $data["soluong"][$i] < 0) {
+                return response()->json([
+                    'success' => 'false',
+                    'errors'  => ["Số lượng không đủ cửa hàng hiện tại còn $size->amount theo sản phẩm " . $value['Titleproduct']],
+                ], 400);
+            }
             $cartnew = [
                 "idproduct" => $value['idproduct'],
+                "idsize" => $value['idsize'],
                 'url' => $value['url'],
                 "Titleproduct" =>  $value['Titleproduct'],
                 "Amount" => $data["soluong"][$i++],

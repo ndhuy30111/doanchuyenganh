@@ -60,7 +60,7 @@ class ProductController extends Controller
             ->select('product.title', 'product.price', 'image.url as urlimage', 'product.url','product.idproduct')
             ->where('category.url', '=', $url)
             ->get();
-          
+
         return view('page.shop', [
             'image' => $image,
             'product' => $product,
@@ -77,13 +77,13 @@ class ProductController extends Controller
             'image' => $dataimage
             ]);
     }
-    public function showslidesImage(Request $request)
+    public function showSize(Request $request)
     {
-        $dataimage = DB::table('image')
+        $size = DB::table('sizeproduct')
             ->where('colorproductid', '=', $request->id)
             ->get();
-        return view('ajax.slidesimage', [
-            'image' => $dataimage
+        return view('ajax.size', [
+            'size' => $size
             ]);
     }
 }

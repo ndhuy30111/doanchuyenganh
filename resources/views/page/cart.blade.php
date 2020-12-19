@@ -152,18 +152,17 @@ $sum=0;
             contentType:false,
             method:'POST',
             success: function(data){
-                alertify
-                    .alert("Cập nhập giỏ hàng","Cập nhập giỏ hàng thành công.", function(){
-                    location.reload();
-
-                });
+                alertify.set('notifier','position', 'top-center');
+                alertify.success('Cập nhập thành công');
+                setTimeout(window.location.reload.bind(window.location), 300);
             },
             error: function(data){
-                alertify
-                    .errorAlert("Cập nhập giỏ hàng thất bại.</br> Số lượng sản phẩm là số và lớn hơn 1", function(){
-                    location.reload();
+                var errors = data.responseJSON;
+                $.each( errors.errors, function( key, value ) {
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.error(value);
                 });
-            }
+                }
             });
             },
         function(){

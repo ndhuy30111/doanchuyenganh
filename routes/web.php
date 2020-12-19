@@ -11,9 +11,11 @@ use App\Http\Controllers\user\CartController;
 use App\Http\Controllers\user\CheckoutController;
 use App\Http\Controllers\user\ContactController;
 use App\Http\Controllers\user\Home;
+use App\Http\Controllers\user\HomeController;
 use App\Http\Controllers\user\LoginController;
 use App\Http\Controllers\user\ProductController as UserProductController;
 use App\Http\Controllers\user\SearchController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,12 +30,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 /*User*/
-Route::get('/', [Home::class,'index']);
-Route::get('shop',function(){
-    return view('page.shop');
-});
-Route::get('details',function(){
-    return view('page.details');
+Route::get('/', [HomeController::class,'index']);
+
+Route::get('stogare',function (){
+    Artisan::call('storage:link');
 });
 
 /*
@@ -46,6 +46,7 @@ Route::post('checkout',[CheckoutController::class,'checkout'])->middleware("auth
 
 Route::get('sanpham/{url}',[UserProductController::class,'showProduct']);
 Route::get('image',[UserProductController::class,'showImage']);
+Route::get('size',[UserProductController::class,'showSize']);
 
 
 Route::get('login',[LoginController::class,'index'])->name('login');
@@ -96,6 +97,7 @@ Route::prefix('admins')->middleware("authadmin")->group(function () {
         Route::post('them', [ProductController::class, 'insert'])->name('admins.sanpham.them');
         Route::post('themcolor/{id}', [ProductController::class, 'insertColor'])->name('admins.sanpham.themcolor');
         //Update sản phẩm
+        Route::get('status/{id}',[ProductController::class,'updateStatus'])->name('admin.sanpham.update.status');
         Route::get('{id}', [ProductController::class, 'updateShow'])->name('admins.sanpham.update');
         Route::post('product/{id}', [ProductController::class, 'updateProduct'])->name('admins.sanpham.update.product');
         Route::post('color/{id}', [ProductController::class, 'updateNameColor'])->name('admins.sanpham.update.color');
@@ -117,6 +119,7 @@ Route::prefix('admins')->middleware("authadmin")->group(function () {
     });
     Route::prefix('khachhang')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('admins.khachhang.index');
+        Route::get('{id}',[UserController::class,'history'])->name('admins.khachhang.history');
     });
     Route::prefix('donhang')->group(function () {
         Route::get('chuaxuly', [InvoiceController::class, 'NoProcess'])->name('admins.donhan.chuaxuly');
