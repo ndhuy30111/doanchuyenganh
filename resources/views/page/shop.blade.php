@@ -162,20 +162,11 @@
                                 <ul class="product__hover">
                                     <li><a href="{{url("./img/product/$item->urlimage")}}" class="image-popup"><span
                                                 class="arrow_expand"></span></a></li>
-                                    <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                    <li><a href="javascript:" onclick="AddCart({{$item->idproduct}})"><span
-                                                class="icon_bag_alt"></span></a></li>
                                 </ul>
                             </div>
                             <div class="product__item__text">
                                 <h6><a href="{{url("sanpham/$item->url")}}">{{$item->title}}</a></h6>
-                                <div class="rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
+
                                 <div class="product__price">{{number_format($item->price)}}₫</div>
                             </div>
                         </div>
@@ -183,10 +174,8 @@
                     @endforeach
                     <div class="col-lg-12 text-center">
                         <div class="pagination__option">
-                            <a href="#">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <a href="#"><i class="fa fa-angle-right"></i></a>
+                            <a href="{{$product->previousPageUrl()}}"><i class="fa fa-angle-left"></i></a>
+                            <a href="{{$product->nextPageUrl()}}"><i class="fa fa-angle-right"></i></a>
                         </div>
                     </div>
                 </div>

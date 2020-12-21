@@ -115,7 +115,7 @@
                            width: 90px;">
                         </div>
                         <div class="trend__item__text">
-                            <h6>Chain bucket bag</h6>
+                            <a href="{{url("sanpham/$item->url")}}">  <h6>{{$item->title}}</h6></a>
                             <div class="product__price">{{number_format($item->price,0,'','.')}} ₫</div>
                         </div>
                     </div>
@@ -134,12 +134,13 @@
                            width: 90px;">
                         </div>
                         <div class="trend__item__text">
-                            <h6>Chain bucket bag</h6>
+                            <a href="{{url("sanpham/$item->url")}}">  <h6>{{$item->title}}</h6></a>
+
                             <div class="product__price">{{number_format($item->price,0,'','.')}} ₫</div>
                         </div>
                     </div>
                     @endforeach
-                    
+
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-6">
@@ -154,12 +155,12 @@
                            width: 90px;">
                         </div>
                         <div class="trend__item__text">
-                            <h6>Chain bucket bag</h6>
+                            <a href="{{url("sanpham/$item->url")}}">  <h6>{{$item->title}}</h6></a>
                             <div class="product__price">{{number_format($item->price,0,'','.')}} ₫</div>
                         </div>
                     </div>
                     @endforeach
-                   
+
                 </div>
             </div>
         </div>

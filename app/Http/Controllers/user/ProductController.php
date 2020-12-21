@@ -12,17 +12,14 @@ class ProductController extends Controller
 {
     public function Product()
     {
-
         $category = DB::table('category')->get();
-        $category_products = DB::table('category_products')->get();
-        $colorproduct = DB::table('colorproduct')->get();
         $image = DB::table('image')->get();
         $product = DB::table('product')
             ->join('colorproduct', 'colorproduct.productid', '=', 'product.idproduct')
             ->join('image', 'image.colorproductid', '=', 'colorproduct.idcolorproduct')
             ->groupBy('product.idproduct')
             ->select('product.title', 'product.price', 'image.url as urlimage', 'product.idproduct', 'product.url')
-            ->get();
+            ->paginate(9);
         return view('page.shop', [
             'image' => $image,
             'product' => $product,
@@ -32,17 +29,31 @@ class ProductController extends Controller
     }
     public function showProduct($url)
     {
-            $product = DB::table('product')->where('url', '=', $url)->first();
+
+            $product = DB::table('product')->join('category_products','category_products.productsid','=','product.idproduct')->where('url', '=', $url)->first();
+            $category= DB::table('category')->where('idcategory','=',$product->categoryid)->first();
             $color = DB::table('colorproduct')->where('productid', '=', $product->idproduct)->get();
             $size = DB::table('sizeproduct')->where('colorproductid','=',$color[0]->idcolorproduct)->get();
             $image = DB::table('image')->where('colorproductid', '=', $color[0]->idcolorproduct)->get();
+            $category_products = DB::table('product')
+            ->join('category_products','category_products.productsid','=','product.idproduct')
+            ->join('colorproduct', 'colorproduct.productid', '=', 'product.idproduct')
+            ->join('image', 'image.colorproductid', '=', 'colorproduct.idcolorproduct')
+            ->groupBy('product.idproduct')
+            ->select('product.title', 'product.price', 'image.url as urlimage', 'product.idproduct', 'product.url')
+            ->where('category_products.categoryid','=',$product->categoryid)
+            ->whereNotIn('product.idproduct',[$product->idproduct])
+            ->limit(4)
+            ->get();
             return view(
                 'page.details',
                 [
                     'product' => $product,
                     'color' => $color,
                     'size'=>$size,
-                    'image' => $image
+                    'image' => $image,
+                    'categoryproduct'=>$category_products,
+                    'category'=>$category,
                 ]
             );
 
@@ -59,7 +70,7 @@ class ProductController extends Controller
             ->groupBy('product.idproduct')
             ->select('product.title', 'product.price', 'image.url as urlimage', 'product.url','product.idproduct')
             ->where('category.url', '=', $url)
-            ->get();
+            ->paginate(9);
 
         return view('page.shop', [
             'image' => $image,

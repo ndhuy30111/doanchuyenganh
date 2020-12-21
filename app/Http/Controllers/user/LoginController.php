@@ -50,6 +50,6 @@ class LoginController extends Controller
 
     public function Logout() {
 		Auth::logout();
-        return view('page.home');
+        return redirect('/');
 	}
 }

@@ -17,7 +17,7 @@ class SearchController extends Controller
             ->select('product.title', 'product.price', 'image.url as urlimage','product.idproduct','product.url')
             ->where ('product.title', 'LIKE', "%$req->key%")
             ->groupBy('image.colorproductid')
-            ->get();
+            ->paginate(9);
         return view('page.shop', [
             'image' => $image,
             'product' => $product,
